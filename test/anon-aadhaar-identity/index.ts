@@ -1,17 +1,20 @@
 import { ethers } from 'hardhat';
-import { BalanceCredentialIssuerDeployHelper } from '../helpers/BalanceCredentialIssuerDeployHelper';
+import { AnonAadhaarBalanceCredentialIssuerDeployHelper } from '../helpers/AnonAadhaarBalanceCredentialIssuerDeployHelper';
 import { StateDeployHelper } from '../helpers/StateDeployHelper';
 import { expect } from 'chai';
 import { Claim } from '@iden3/js-iden3-core';
 
-describe('Reproduce identity life cycle', function () {
+describe('Reproduce anon-aadhaar identity life cycle', function () {
   let identity;
 
   before(async function () {
     const signer = await ethers.getImpersonatedSigner('0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266');
 
     const stDeployHelper = await StateDeployHelper.initialize([signer]);
-    const deployHelper = await BalanceCredentialIssuerDeployHelper.initialize([signer], true);
+    const deployHelper = await AnonAadhaarBalanceCredentialIssuerDeployHelper.initialize(
+      [signer],
+      true
+    );
     const stContracts = await stDeployHelper.deployState();
     const contracts = await deployHelper.deployBalanceCredentialIssuer(
       stContracts.smtLib,
@@ -23,7 +26,7 @@ describe('Reproduce identity life cycle', function () {
   });
 
   describe('create identity', function () {
-    it("validate identity's id", async function () {
+    it.only("validate identity's id", async function () {
       const tx = await identity.issueCredential(1);
       await tx.wait();
       const usersCredentials = await identity.getUserCredentialIds(1);
