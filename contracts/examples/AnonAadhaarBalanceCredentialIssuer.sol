@@ -15,6 +15,7 @@ import {PoseidonUnit4L} from '@iden3/contracts/lib/Poseidon.sol';
  */
 contract AnonAadhaarBalanceCredentialIssuer is NonMerklizedIssuerBase, Ownable2StepUpgradeable {
     using IdentityLib for IdentityLib.Data;
+    address immutable public anonAadhaarVerifierAddr;
 
     /// @custom:storage-location erc7201:polygonid.storage.BalanceCredentialIssuer
     struct BalanceCredentialIssuerStorage {
@@ -60,6 +61,12 @@ contract AnonAadhaarBalanceCredentialIssuer is NonMerklizedIssuerBase, Ownable2S
         uint256 id;
         uint64 issuanceDate;
         uint256[8] claim;
+    }
+
+    constructor(    
+        address _verifierAddr
+    ) {
+        anonAadhaarVerifierAddr = _verifierAddr;
     }
 
     function initialize(address _stateContractAddr) public override initializer {
@@ -131,15 +138,24 @@ contract AnonAadhaarBalanceCredentialIssuer is NonMerklizedIssuerBase, Ownable2S
     }
 
     /**
-     * @dev Issue credential with user's balance
-     * @param _userId - user id for which the claim is issued
+     * @dev Issue credential based on Anon Aadhaar Proof.
+     * @param nullifierSeed: Nullifier Seed used while generating the proof.
+     * @param nullifier: Nullifier for the user's Aadhaar data, used as user id for which the claim is issued.
+     * @param timestamp: Timestamp of when the QR code was signed.
+     * @param signal: signal used while generating the proof, should be equal to msg.sender.
+     * @param revealArray: Array of the values used to reveal data, if value is 1 data is revealed, not if 0.
+     * @param groth16Proof: SNARK Groth16 proof.
      */
-    function issueCredential(uint256 _userId) public {
+    function issueCredential( 
+        uint nullifierSeed,
+        uint nullifier,
+        uint timestamp,
+        uint signal,
+        uint[4] calldata revealArray, 
+        uint[8] calldata groth16Proof) public {
         BalanceCredentialIssuerStorage storage $ = _getBalanceCredentialIssuerStorage();
 
         uint64 expirationDate = convertTime(block.timestamp + 30 days);
-        uint256 ownerAddress = PrimitiveTypeUtils.addressToUint256(msg.sender);
-        uint256 ownerBalance = msg.sender.balance;
 
         ClaimBuilder.ClaimData memory claimData = ClaimBuilder.ClaimData({
             // metadata
@@ -149,15 +165,15 @@ contract AnonAadhaarBalanceCredentialIssuer is NonMerklizedIssuerBase, Ownable2S
             updatable: false,
             merklizedRootPosition: 0,
             version: 0,
-            id: _userId,
+            id: nullifier,
             revocationNonce: $.countOfIssuedClaims,
             expirationDate: expirationDate,
             // data
             merklizedRoot: 0,
-            indexDataSlotA: ownerAddress,
-            indexDataSlotB: ownerBalance,
-            valueDataSlotA: 0,
-            valueDataSlotB: 0
+            indexDataSlotA: revealArray[0],
+            indexDataSlotB: revealArray[1],
+            valueDataSlotA: revealArray[2],
+            valueDataSlotB: revealArray[3]
         });
         uint256[8] memory claim = ClaimBuilder.build(claimData);
 
@@ -171,14 +187,20 @@ contract AnonAadhaarBalanceCredentialIssuer is NonMerklizedIssuerBase, Ownable2S
         });
 
         $.idToCredentialSubject[$.countOfIssuedClaims].push(
-            INonMerklizedIssuer.SubjectField({key: 'balance', value: ownerBalance, rawValue: ''})
+            INonMerklizedIssuer.SubjectField({key: 'ageAbove18', value: revealArray[0], rawValue: ''})
         );
         $.idToCredentialSubject[$.countOfIssuedClaims].push(
-            INonMerklizedIssuer.SubjectField({key: 'address', value: ownerAddress, rawValue: ''})
+            INonMerklizedIssuer.SubjectField({key: 'gender', value: revealArray[1], rawValue: ''})
+        );
+        $.idToCredentialSubject[$.countOfIssuedClaims].push(
+            INonMerklizedIssuer.SubjectField({key: 'pinCode', value: revealArray[2], rawValue: ''})
+        );
+        $.idToCredentialSubject[$.countOfIssuedClaims].push(
+            INonMerklizedIssuer.SubjectField({key: 'state', value: revealArray[3], rawValue: ''})
         );
 
         addClaimHashAndTransit(hashIndex, hashValue);
-        saveClaim(_userId, claimToSave);
+        saveClaim(nullifier, claimToSave);
     }
 
     // saveClaim save a claim to storage
