@@ -22,7 +22,7 @@ describe('Reproduce anon-aadhaar identity life cycle', function () {
       stContracts.poseidon4,
       await stContracts.state.getAddress()
     );
-    identity = contracts.balanceCredentialIssuer;
+    identity = contracts.AnonAadhaarBalanceCredentialIssuer;
   });
 
   describe('create identity', function () {
