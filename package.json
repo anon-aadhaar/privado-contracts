@@ -72,5 +72,8 @@
     "format": "prettier --write scripts/*.ts test/**/*.ts",
     "lint:contracts": "npx solhint contracts/**/*.sol",
     "prettier:contracts": "prettier --write --plugin=prettier-plugin-solidity 'contracts/**/*.sol'"
+  },
+  "dependencies": {
+    "@anon-aadhaar/core": "^2.2.4"
   }
 }

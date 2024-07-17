@@ -3,9 +3,18 @@ import { AnonAadhaarBalanceCredentialIssuerDeployHelper } from '../helpers/AnonA
 import { StateDeployHelper } from '../helpers/StateDeployHelper';
 import { expect } from 'chai';
 import { Claim } from '@iden3/js-iden3-core';
+import { AnonAadhaarProof, PackedGroth16Proof } from '@anon-aadhaar/core';
+import { generateAnonAadhaarProof } from '../helpers/generateAnonAadhaarProof';
+
+const nullifierSeed = 1234;
 
 describe('Reproduce anon-aadhaar identity life cycle', function () {
+  this.timeout(0);
+
   let identity;
+  let anonAadhaarProof: AnonAadhaarProof;
+  let packedGroth16Proof: PackedGroth16Proof;
+  let user1address: string;
 
   before(async function () {
     const signer = await ethers.getImpersonatedSigner('0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266');
@@ -23,14 +32,39 @@ describe('Reproduce anon-aadhaar identity life cycle', function () {
       await stContracts.state.getAddress()
     );
     identity = contracts.AnonAadhaarBalanceCredentialIssuer;
+
+    // Using sender's address as signal
+    const [user1] = await ethers.getSigners();
+    user1address = user1.address;
+
+    const proof = await generateAnonAadhaarProof(nullifierSeed, user1address);
+    anonAadhaarProof = proof.anonAadhaarProof;
+    packedGroth16Proof = proof.packedGroth16Proof;
   });
 
   describe('create identity', function () {
     it.only("validate identity's id", async function () {
-      const tx = await identity.issueCredential(1);
+      const tx = await identity.issueCredential(
+        nullifierSeed,
+        anonAadhaarProof.nullifier,
+        anonAadhaarProof.timestamp,
+        user1address,
+        [
+          anonAadhaarProof.ageAbove18,
+          anonAadhaarProof.gender,
+          anonAadhaarProof.pincode,
+          anonAadhaarProof.state
+        ],
+        packedGroth16Proof
+      );
       await tx.wait();
-      const usersCredentials = await identity.getUserCredentialIds(1);
-      const credential = await identity.getCredential(1, usersCredentials[0]);
+      const usersCredentials = await identity.getUserCredentialIds(anonAadhaarProof.nullifier);
+      const credential = await identity.getCredential(
+        anonAadhaarProof.nullifier,
+        usersCredentials[0]
+      );
+
+      console.log('credential: ', credential);
 
       const credentialData = credential[0];
       expect(credentialData.id).to.be.equal(0);

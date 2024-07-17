@@ -79,7 +79,7 @@ export class AnonAadhaarBalanceCredentialIssuerDeployHelper {
         initializer: 'initialize(address,address)'
       }
     );
-    console.log('AnonAadhaarBalanceCredentialIssuer this is done!');
+
     await AnonAadhaarBalanceCredentialIssuer.waitForDeployment();
 
     this.log(
