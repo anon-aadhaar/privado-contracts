@@ -15,7 +15,7 @@ import {PoseidonUnit4L} from '@iden3/contracts/lib/Poseidon.sol';
  */
 contract AnonAadhaarBalanceCredentialIssuer is NonMerklizedIssuerBase, Ownable2StepUpgradeable {
     using IdentityLib for IdentityLib.Data;
-    address immutable public anonAadhaarVerifierAddr;
+    address public anonAadhaarVerifierAddr;
 
     /// @custom:storage-location erc7201:polygonid.storage.BalanceCredentialIssuer
     struct BalanceCredentialIssuerStorage {
@@ -63,13 +63,9 @@ contract AnonAadhaarBalanceCredentialIssuer is NonMerklizedIssuerBase, Ownable2S
         uint256[8] claim;
     }
 
-    constructor(    
-        address _verifierAddr
-    ) {
+    function initialize(address _stateContractAddr, address _verifierAddr) public initializer {
+        require(anonAadhaarVerifierAddr == address(0), "Already initialized");
         anonAadhaarVerifierAddr = _verifierAddr;
-    }
-
-    function initialize(address _stateContractAddr) public override initializer {
         super.initialize(_stateContractAddr);
         __Ownable_init(_msgSender());
     }

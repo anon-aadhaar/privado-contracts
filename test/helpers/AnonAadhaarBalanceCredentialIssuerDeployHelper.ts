@@ -1,7 +1,10 @@
 import { ethers, upgrades } from 'hardhat';
 import { Contract } from 'ethers';
-import { SignerWithAddress } from '@nomiclabs/hardhat-ethers/signers';
+import { SignerWithAddress } from '@nomicfoundation/hardhat-ethers/signers';
 import { deployClaimBuilder, deployIdentityLib } from '../utils/deploy-utils';
+
+export const testPublicKeyHash =
+  '15134874015316324267425466444584014077184337590635665158241104437045239495873';
 
 export class AnonAadhaarBalanceCredentialIssuerDeployHelper {
   constructor(
@@ -28,7 +31,7 @@ export class AnonAadhaarBalanceCredentialIssuerDeployHelper {
     poseidon4: Contract,
     stateContractAddress: string
   ): Promise<{
-    balanceCredentialIssuer: Contract;
+    AnonAadhaarBalanceCredentialIssuer: Contract;
   }> {
     const owner = this.signers[0];
 
@@ -42,8 +45,24 @@ export class AnonAadhaarBalanceCredentialIssuerDeployHelper {
       true
     );
 
+    this.log('======== Balance credential issuer: deploy anon aadhaar contracts ========');
+    const Verifier = await ethers.getContractFactory('Verifier');
+    const verifier = await Verifier.deploy();
+
+    const _verifierAddress = await verifier.getAddress();
+
+    const pubkeyHashBigInt = BigInt(testPublicKeyHash).toString();
+
+    const AnonAadhaarContract = await ethers.getContractFactory('AnonAadhaar');
+    const anonAadhaarVerifier = await AnonAadhaarContract.deploy(
+      _verifierAddress,
+      pubkeyHashBigInt
+    );
+
+    const _AnonAadhaarAddress = await anonAadhaarVerifier.getAddress();
+
     const balanceCredentialIssuerFactory = await ethers.getContractFactory(
-      'BalanceCredentialIssuer',
+      'AnonAadhaarBalanceCredentialIssuer',
       {
         libraries: {
           ClaimBuilder: await cb.getAddress(),
@@ -52,22 +71,25 @@ export class AnonAadhaarBalanceCredentialIssuerDeployHelper {
         }
       }
     );
-    const balanceCredentialIssuer = await upgrades.deployProxy(
+    const AnonAadhaarBalanceCredentialIssuer = await upgrades.deployProxy(
       balanceCredentialIssuerFactory,
-      [stateContractAddress],
+      [stateContractAddress, _AnonAadhaarAddress],
       {
-        unsafeAllow: ['external-library-linking', 'struct-definition', 'state-variable-assignment']
+        unsafeAllow: ['external-library-linking', 'struct-definition', 'state-variable-assignment'],
+        initializer: 'initialize(address,address)'
       }
     );
-    await balanceCredentialIssuer.waitForDeployment();
+    console.log('AnonAadhaarBalanceCredentialIssuer this is done!');
+    await AnonAadhaarBalanceCredentialIssuer.waitForDeployment();
+
     this.log(
-      `BalanceCredentialIssuer contract deployed to address ${await balanceCredentialIssuer.getAddress()} from ${await owner.getAddress()}`
+      `BalanceCredentialIssuer contract deployed to address ${await AnonAadhaarBalanceCredentialIssuer.getAddress()} from ${await owner.getAddress()}`
     );
 
     this.log('======== Balance credential issuer: deploy completed ========');
 
     return {
-      balanceCredentialIssuer
+      AnonAadhaarBalanceCredentialIssuer
     };
   }
 

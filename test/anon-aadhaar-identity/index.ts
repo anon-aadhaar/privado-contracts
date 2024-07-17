@@ -71,17 +71,19 @@ describe('Reproduce anon-aadhaar identity life cycle', function () {
       });
 
       const claim = new Claim().unMarshalJson(JSON.stringify(inputs));
+      console.log('Claim', claim);
       const mtpProof = await identity.getClaimProof(claim.hIndex());
+      console.log('mtpProof', mtpProof);
       expect(mtpProof.existence).to.be.true;
     });
   });
 
   describe('check interface implementation', function () {
-    it('EIP165 implementation', async function () {
+    it.only('EIP165 implementation', async function () {
       const isEIP165 = await identity.supportsInterface('0x01ffc9a7');
       expect(isEIP165).to.be.true;
     });
-    it('check interface INonMerklizedIssuer implementation', async function () {
+    it.only('check interface INonMerklizedIssuer implementation', async function () {
       const isINonMerklizedIssuer = await identity.supportsInterface('0x58874949');
       expect(isINonMerklizedIssuer).to.be.true;
     });
