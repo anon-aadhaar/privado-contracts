@@ -30,9 +30,9 @@ contract AnonAadhaarBalanceCredentialIssuer is NonMerklizedIssuerBase, Ownable2S
         mapping(uint256 => INonMerklizedIssuer.SubjectField[]) idToCredentialSubject;
     }
 
-    // keccak256(abi.encode(uint256(keccak256("polygonid.storage.BalanceCredentialIssuer")) - 1)) & ~bytes32(uint256(0xff))
+    // keccak256(abi.encode(uint256(keccak256("anonaadhaar.storage.AnonAadhaarBalanceCredentialIssuer")) - 1)) & ~bytes32(uint256(0xff))
     bytes32 private constant BalanceCredentialIssuerStorageLocation =
-        0xb775a0063b8bb6b7d39c4f74d1ce330eaeeb81ff68db2df91398ea2d7dc23900;
+        0x33009af875187a3bcbd4b4a66e5f861007d091075539980f2ae469e83db83e00;
 
     function _getBalanceCredentialIssuerStorage()
         private
