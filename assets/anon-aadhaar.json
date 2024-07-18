@@ -7,6 +7,8 @@
       "jsonSchema": "https://raw.githubusercontent.com/anon-aadhaar/privado-contracts/main/assets/anon-aadhaar.json"
     }
   },
+  "description": "Anon Aadhaar schema",
+  "title": "Anon Aadhaar",
   "required": [
     "@context",
     "id",
