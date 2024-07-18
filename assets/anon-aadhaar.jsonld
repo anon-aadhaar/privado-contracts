@@ -5,7 +5,7 @@
       "@protected": true,
       "id": "@id",
       "type": "@type",
-      "AnonAadhaar": {
+      "AnonAadhaarCredential": {
         "@id": "https://raw.githubusercontent.com/anon-aadhaar/privado-contracts/main/assets/anon-aadhaar.jsonld#AnonAadhaar",
         "@context": {
           "@version": 1.1,
