@@ -1,0 +1,37 @@
+{
+  "@context": [
+    {
+      "@version": 1.1,
+      "@protected": true,
+      "id": "@id",
+      "type": "@type",
+      "AnonAadhaar": {
+        "@id": "https://raw.githubusercontent.com/anon-aadhaar/privado-contracts/main/assets/anon-aadhaar.jsonld#AnonAadhaar",
+        "@context": {
+          "@version": 1.1,
+          "@protected": true,
+          "id": "@id",
+          "type": "@type",
+          "vocab": "https://github.com/anon-aadhaar/privado-contracts/main/assets/anon-aadhaar.md#",
+          "xsd": "http://www.w3.org/2001/XMLSchema#",
+          "ageAbove18": {
+            "@id": "vocab:entryDate",
+            "@type": "xsd:boolean"
+          },
+          "gender": {
+            "@id": "vocab:gender",
+            "@type": "xsd:string"
+          },
+          "pincode": {
+            "@id": "vocab:pincode",
+            "@type": "xsd:string"
+          },
+          "state": {
+            "@id": "vocab:state",
+            "@type": "xsd:string"
+          }
+        }
+      }
+    }
+  ]
+}
