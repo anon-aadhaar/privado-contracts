@@ -24,6 +24,7 @@ contract AnonAadhaarBalanceCredentialIssuer is NonMerklizedIssuerBase, Ownable2S
         // claim store
         mapping(uint256 => uint256[]) userClaims;
         mapping(uint256 => ClaimItem) idToClaim;
+        mapping(uint256 => uint256) nullifierToUser;
         // this mapping is used to store credential subject fields
         // to escape additional copy in issueCredential function
         // since "Copying of type struct OnchainNonMerklizedIdentityBase.SubjectField memory[] memory to storage not yet supported."
@@ -152,6 +153,8 @@ contract AnonAadhaarBalanceCredentialIssuer is NonMerklizedIssuerBase, Ownable2S
         uint[8] calldata groth16Proof) public {
         BalanceCredentialIssuerStorage storage $ = _getBalanceCredentialIssuerStorage();
 
+        require(isNullifierAlreadyUsed(nullifier),'[AnonAadhaarCredentialIssuer]: Nullifier already used.');
+
         uint64 expirationDate = convertTime(block.timestamp + 30 days);
 
         ClaimBuilder.ClaimData memory claimData = ClaimBuilder.ClaimData({
@@ -218,5 +221,10 @@ contract AnonAadhaarBalanceCredentialIssuer is NonMerklizedIssuerBase, Ownable2S
     function convertTime(uint256 timestamp) private pure returns (uint64) {
         require(timestamp <= type(uint64).max, 'Timestamp exceeds uint64 range');
         return uint64(timestamp);
+    }
+
+    // Check if nullifier already got a credential issued
+    function isNullifierAlreadyUsed(uint nullifier) private view returns (bool) {
+        return nullifierToUser[nullifier];
     }
 }
