@@ -51,11 +51,11 @@ contract AnonAadhaarBalanceCredentialIssuer is NonMerklizedIssuerBase, Ownable2S
 
     // jsonldSchemaHash hash of jsonld schema.
     // More about schema: https://devs.polygonid.com/docs/issuer-node/issuer-node-api/claim/apis/#get-claims
-    uint256 private constant jsonldSchemaHash = 148834697620350657501993499321116864501;
+    uint256 private constant jsonldSchemaHash = 33373039626664303063323863343136;
     string private constant jsonSchema =
-        'https://gist.githubusercontent.com/ilya-korotya/e10cd79a8cc26ab6e40400a11838617e/raw/575edc33d485e2a4c806baad97e21117f3c90a9f/non-merklized-non-zero-balance.json';
+        'https://raw.githubusercontent.com/anon-aadhaar/privado-contracts/main/assets/anon-aadhaar.json';
     string private constant jsonldSchema =
-        'https://gist.githubusercontent.com/ilya-korotya/660496c859f8d31a7d2a92ca5e970967/raw/6b5fc14fe630c17bfa52e05e08fdc8394c5ea0ce/non-merklized-non-zero-balance.jsonld';
+        '';
 
     struct ClaimItem {
         uint256 id;
@@ -110,7 +110,7 @@ contract AnonAadhaarBalanceCredentialIssuer is NonMerklizedIssuerBase, Ownable2S
             .CredentialData({
                 id: claimItem.id,
                 context: jsonLDContextUrls,
-                _type: 'Balance',
+                _type: 'AnonAadhaarCredential',
                 issuanceDate: claimItem.issuanceDate,
                 credentialSchema: INonMerklizedIssuer.CredentialSchema({
                     id: jsonSchema,
@@ -189,7 +189,7 @@ contract AnonAadhaarBalanceCredentialIssuer is NonMerklizedIssuerBase, Ownable2S
             INonMerklizedIssuer.SubjectField({key: 'gender', value: revealArray[1], rawValue: ''})
         );
         $.idToCredentialSubject[$.countOfIssuedClaims].push(
-            INonMerklizedIssuer.SubjectField({key: 'pinCode', value: revealArray[2], rawValue: ''})
+            INonMerklizedIssuer.SubjectField({key: 'pincode', value: revealArray[2], rawValue: ''})
         );
         $.idToCredentialSubject[$.countOfIssuedClaims].push(
             INonMerklizedIssuer.SubjectField({key: 'state', value: revealArray[3], rawValue: ''})

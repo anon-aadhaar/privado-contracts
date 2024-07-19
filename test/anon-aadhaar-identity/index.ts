@@ -5,6 +5,7 @@ import { expect } from 'chai';
 import { Claim } from '@iden3/js-iden3-core';
 import { AnonAadhaarProof, PackedGroth16Proof } from '@anon-aadhaar/core';
 import { generateAnonAadhaarProof } from '../helpers/generateAnonAadhaarProof';
+import { bigIntsToString } from '../../scripts/utils';
 
 const nullifierSeed = 1234;
 
@@ -64,19 +65,15 @@ describe('Reproduce anon-aadhaar identity life cycle', function () {
         usersCredentials[0]
       );
 
-      console.log('credential: ', credential);
-
       const credentialData = credential[0];
       expect(credentialData.id).to.be.equal(0);
-      expect(credentialData.context)
-        .to.be.an('array')
-        .that.includes(
-          'https://gist.githubusercontent.com/ilya-korotya/660496c859f8d31a7d2a92ca5e970967/raw/6b5fc14fe630c17bfa52e05e08fdc8394c5ea0ce/non-merklized-non-zero-balance.jsonld',
-          'https://schema.iden3.io/core/jsonld/displayMethod.jsonld'
-        );
-      expect(credentialData._type).to.be.equal('Balance');
+      expect(credentialData.context).to.be.an('array').that.includes(
+        // 'https://raw.githubusercontent.com/anon-aadhaar/privado-contracts/main/assets/anon-aadhaar.jsonld'
+        'https://schema.iden3.io/core/jsonld/displayMethod.jsonld'
+      );
+      expect(credentialData._type).to.be.equal('AnonAadhaarCredential');
       expect(credentialData.credentialSchema.id).to.be.equal(
-        'https://gist.githubusercontent.com/ilya-korotya/e10cd79a8cc26ab6e40400a11838617e/raw/575edc33d485e2a4c806baad97e21117f3c90a9f/non-merklized-non-zero-balance.json'
+        'https://raw.githubusercontent.com/anon-aadhaar/privado-contracts/main/assets/anon-aadhaar.json'
       );
       expect(credentialData.credentialSchema['_type']).to.be.equal('JsonSchema2023');
       expect(credentialData.displayMethod.id).to.be.equal(
@@ -88,16 +85,32 @@ describe('Reproduce anon-aadhaar identity life cycle', function () {
       expect(coreClaim).to.be.not.empty;
 
       const credentialSubject = credential[2];
-      expect(credentialSubject).to.be.an('array').that.length(2);
+      expect(credentialSubject).to.be.an('array').that.length(4);
 
-      const balanceField = credentialSubject[0];
-      expect(balanceField.key).to.be.equal('balance');
-      expect(balanceField.value).to.be.not.equal(0);
+      // ageAbove18 credential
+      const ageAbove18Field = credentialSubject[0];
+      expect(ageAbove18Field.key).to.be.equal('ageAbove18');
+      expect(ageAbove18Field.value).to.be.equal(BigInt(1));
 
-      const addressFiled = credentialSubject[1];
-      expect(addressFiled.key).to.be.equal('address');
-      const bigIntAddress = BigInt('0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266');
-      expect(addressFiled.value).to.be.equal(bigIntAddress);
+      // gender credential
+      const genderField = credentialSubject[1];
+      expect(genderField.key).to.be.equal('gender');
+      expect(bigIntsToString([BigInt(genderField.value)])).to.be.equal('M');
+
+      // pincode credential
+      const pincodeField = credentialSubject[2];
+      expect(pincodeField.key).to.be.equal('pincode');
+      expect(pincodeField.value).to.be.equal(110051);
+
+      // state credential
+      const stateField = credentialSubject[3];
+      expect(stateField.key).to.be.equal('state');
+      expect(bigIntsToString([BigInt(stateField.value)])).to.be.equal('Delhi');
+
+      // const addressFiled = credentialSubject[1];
+      // expect(addressFiled.key).to.be.equal('address');
+      // const bigIntAddress = BigInt('0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266');
+      // expect(addressFiled.value).to.be.equal(bigIntAddress);
 
       const inputs: Array<string> = [];
       coreClaim.forEach((c) => {
@@ -105,9 +118,7 @@ describe('Reproduce anon-aadhaar identity life cycle', function () {
       });
 
       const claim = new Claim().unMarshalJson(JSON.stringify(inputs));
-      console.log('Claim', claim);
       const mtpProof = await identity.getClaimProof(claim.hIndex());
-      console.log('mtpProof', mtpProof);
       expect(mtpProof.existence).to.be.true;
     });
   });

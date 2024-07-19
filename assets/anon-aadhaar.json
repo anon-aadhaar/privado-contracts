@@ -5,26 +5,86 @@
     "uris": {
       "jsonLdContext": "https://raw.githubusercontent.com/anon-aadhaar/privado-contracts/main/assets/anon-aadhaar.jsonld",
       "jsonSchema": "https://raw.githubusercontent.com/anon-aadhaar/privado-contracts/main/assets/anon-aadhaar.json"
+    },
+    "version": "1.0",
+    "type": "AnonAadhaarCredential",
+    "iden3Serialization": {
+      "slotIndexA": "ageAbove18",
+      "slotIndexB": "gender",
+      "slotValueA": "pincode",
+      "slotValueB": "state"
     }
   },
   "description": "Anon Aadhaar schema",
   "title": "Anon Aadhaar",
   "required": [
+    "credentialSubject",
     "@context",
     "id",
-    "type",
     "issuanceDate",
-    "credentialSubject",
-    "credentialSchema",
-    "credentialStatus",
-    "issuer"
+    "issuer",
+    "type",
+    "credentialSchema"
   ],
   "properties": {
+    "credentialSubject": {
+      "description": "Stores the data of the credential",
+      "title": "Credential subject",
+      "properties": {
+        "id": {
+          "description": "Stores the DID of the subject that owns the credential",
+          "title": "Credential subject ID",
+          "format": "uri",
+          "type": "string"
+        },
+        "ageAbove18": {
+          "description": "Is the age above 18 years old",
+          "title": "Age above 18",
+          "type": "boolean"
+        },
+        "gender": {
+          "description": "Gender of the user",
+          "title": "Gender",
+          "type": "string"
+        },
+        "pincode": {
+          "description": "Pincode of the user",
+          "title": "Pincode",
+          "type": "string"
+        },
+        "state": {
+          "description": "State of the user",
+          "title": "State",
+          "type": "string"
+        }
+      },
+      "required": [],
+      "type": "object"
+    },
     "@context": {
       "type": ["string", "array", "object"]
     },
+    "expirationDate": {
+      "format": "date-time",
+      "type": "string"
+    },
     "id": {
       "type": "string"
+    },
+    "issuanceDate": {
+      "format": "date-time",
+      "type": "string"
+    },
+    "issuer": {
+      "type": ["string", "object"],
+      "format": "uri",
+      "properties": {
+        "id": {
+          "format": "uri",
+          "type": "string"
+        }
+      },
+      "required": ["id"]
     },
     "type": {
       "type": ["string", "array"],
@@ -32,77 +92,37 @@
         "type": "string"
       }
     },
-    "issuer": {
-      "type": ["string", "object"],
-      "format": "uri",
-      "required": ["id"],
-      "properties": {
-        "id": {
-          "type": "string",
-          "format": "uri"
-        }
-      }
-    },
-    "issuanceDate": {
-      "type": "string",
-      "format": "date-time"
-    },
-    "expirationDate": {
-      "type": "string",
-      "format": "date-time"
-    },
     "credentialSchema": {
-      "type": "object",
-      "required": ["id", "type"],
       "properties": {
         "id": {
-          "type": "string",
-          "format": "uri"
+          "format": "uri",
+          "type": "string"
         },
         "type": {
           "type": "string"
         }
-      }
+      },
+      "required": ["id", "type"],
+      "type": "object"
     },
-    "subjectPosition": {
-      "type": "string",
-      "enum": ["none", "index", "value"]
-    },
-    "merklizationRootPosition": {
-      "type": "string",
-      "enum": ["none", "index", "value"]
-    },
-    "revNonce": {
-      "type": "integer"
-    },
-    "version": {
-      "type": "integer"
-    },
-    "updatable": {
-      "type": "boolean"
-    },
-    "credentialSubject": {
-      "type": "object",
-      "required": ["id", "ageAbove18", "gender", "pincode", "state"],
+    "credentialStatus": {
+      "description": "Allows the discovery of information about the current status of the credential, such as whether it is suspended or revoked.",
+      "title": "Credential Status",
       "properties": {
         "id": {
-          "title": "Credential Subject ID",
-          "type": "string",
-          "format": "uri"
-        },
-        "ageAbove18": {
-          "type": "boolean"
-        },
-        "gender": {
+          "description": "Id URL of the credentialStatus.",
+          "title": "Id",
+          "format": "uri",
           "type": "string"
         },
-        "pincode": {
-          "type": "string"
-        },
-        "state": {
+        "type": {
+          "description": "Expresses the credential status type (method). The value should provide enough information to determine the current status of the credential.",
+          "title": "Type",
           "type": "string"
         }
-      }
+      },
+      "required": ["id", "type"],
+      "type": "object"
     }
   }
 }
