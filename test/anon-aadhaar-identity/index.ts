@@ -107,11 +107,6 @@ describe('Reproduce anon-aadhaar identity life cycle', function () {
       expect(stateField.key).to.be.equal('state');
       expect(bigIntsToString([BigInt(stateField.value)])).to.be.equal('Delhi');
 
-      // const addressFiled = credentialSubject[1];
-      // expect(addressFiled.key).to.be.equal('address');
-      // const bigIntAddress = BigInt('0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266');
-      // expect(addressFiled.value).to.be.equal(bigIntAddress);
-
       const inputs: Array<string> = [];
       coreClaim.forEach((c) => {
         inputs.push(c.toString());

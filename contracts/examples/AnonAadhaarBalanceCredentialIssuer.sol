@@ -143,6 +143,7 @@ contract AnonAadhaarBalanceCredentialIssuer is NonMerklizedIssuerBase, Ownable2S
      * @param groth16Proof: SNARK Groth16 proof.
      */
     function issueCredential( 
+        uint _userId,
         uint nullifierSeed,
         uint nullifier,
         uint timestamp,
@@ -196,7 +197,7 @@ contract AnonAadhaarBalanceCredentialIssuer is NonMerklizedIssuerBase, Ownable2S
         );
 
         addClaimHashAndTransit(hashIndex, hashValue);
-        saveClaim(nullifier, claimToSave);
+        saveClaim(_userId, claimToSave);
     }
 
     // saveClaim save a claim to storage
