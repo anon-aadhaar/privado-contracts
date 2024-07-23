@@ -8,6 +8,7 @@ import { generateAnonAadhaarProof } from '../helpers/generateAnonAadhaarProof';
 import { bigIntsToString } from '../../scripts/utils';
 
 const nullifierSeed = 1234;
+const _userId = 1;
 
 describe('Reproduce anon-aadhaar identity life cycle', function () {
   this.timeout(0);
@@ -46,6 +47,7 @@ describe('Reproduce anon-aadhaar identity life cycle', function () {
   describe('create identity', function () {
     it.only("validate identity's id", async function () {
       const tx = await identity.issueCredential(
+        _userId,
         nullifierSeed,
         anonAadhaarProof.nullifier,
         anonAadhaarProof.timestamp,
@@ -59,11 +61,8 @@ describe('Reproduce anon-aadhaar identity life cycle', function () {
         packedGroth16Proof
       );
       await tx.wait();
-      const usersCredentials = await identity.getUserCredentialIds(anonAadhaarProof.nullifier);
-      const credential = await identity.getCredential(
-        anonAadhaarProof.nullifier,
-        usersCredentials[0]
-      );
+      const usersCredentials = await identity.getUserCredentialIds(_userId);
+      const credential = await identity.getCredential(_userId, usersCredentials[0]);
 
       const credentialData = credential[0];
       expect(credentialData.id).to.be.equal(0);

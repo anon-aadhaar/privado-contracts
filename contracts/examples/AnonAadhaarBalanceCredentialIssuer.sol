@@ -8,6 +8,7 @@ import {INonMerklizedIssuer} from '@iden3/contracts/interfaces/INonMerklizedIssu
 import {NonMerklizedIssuerBase} from '@iden3/contracts/lib/NonMerklizedIssuerBase.sol';
 import {PrimitiveTypeUtils} from '@iden3/contracts/lib/PrimitiveTypeUtils.sol';
 import {PoseidonUnit4L} from '@iden3/contracts/lib/Poseidon.sol';
+import {IAnonAadhaar} from '../interfaces/IAnonAadhaar.sol';
 
 /**
  * @dev Example of decentralized balance credential issuer.
@@ -56,7 +57,7 @@ contract AnonAadhaarBalanceCredentialIssuer is NonMerklizedIssuerBase, Ownable2S
     string private constant jsonSchema =
         'https://raw.githubusercontent.com/anon-aadhaar/privado-contracts/main/assets/anon-aadhaar.json';
     string private constant jsonldSchema =
-        '';
+        'https://raw.githubusercontent.com/anon-aadhaar/privado-contracts/main/assets/anon-aadhaar.jsonld';
 
     struct ClaimItem {
         uint256 id;
@@ -153,7 +154,28 @@ contract AnonAadhaarBalanceCredentialIssuer is NonMerklizedIssuerBase, Ownable2S
         uint[8] calldata groth16Proof) public {
         BalanceCredentialIssuerStorage storage $ = _getBalanceCredentialIssuerStorage();
 
-        require(isNullifierAlreadyUsed(nullifier),'[AnonAadhaarCredentialIssuer]: Nullifier already used.');
+        // Check if the nullifier has already been used
+        uint256 previousClaimId = $.nullifierToUser[nullifier];
+        if (previousClaimId != 0) {
+            ClaimItem memory previousClaim = $.idToClaim[previousClaimId];
+            require(block.timestamp >= previousClaim.claim[4], "[AnonAadhaarCredentialIssuer]: Previous claim not expired.");
+        }
+
+        // require(
+        //     isLessThan3HoursAgo(timestamp),
+        //     '[AnonAadhaarVote]: Proof must be generated with Aadhaar data signed less than 3 hours ago.'
+        // );
+        require(
+            IAnonAadhaar(anonAadhaarVerifierAddr).verifyAnonAadhaarProof(
+                nullifierSeed, // nullifier seed
+                nullifier,
+                timestamp,
+                signal,
+                revealArray,
+                groth16Proof
+            ),
+            '[AnonAadhaarVote]: The proof sent is not valid.'
+        );
 
         uint64 expirationDate = convertTime(block.timestamp + 30 days);
 
@@ -223,8 +245,10 @@ contract AnonAadhaarBalanceCredentialIssuer is NonMerklizedIssuerBase, Ownable2S
         return uint64(timestamp);
     }
 
-    // Check if nullifier already got a credential issued
-    function isNullifierAlreadyUsed(uint nullifier) private view returns (bool) {
-        return nullifierToUser[nullifier];
+    /// @dev Check if the timestamp is more recent than (current time - 3 hours)
+    /// @param timestamp: msg.sender address.
+    /// @return bool
+    function isLessThan3HoursAgo(uint timestamp) public view returns (bool) {
+        return timestamp > (block.timestamp - 3 hours);
     }
 }
