@@ -155,10 +155,15 @@ contract AnonAadhaarBalanceCredentialIssuer is NonMerklizedIssuerBase, Ownable2S
         BalanceCredentialIssuerStorage storage $ = _getBalanceCredentialIssuerStorage();
 
         // Check if the nullifier has already been used
-        uint256 previousClaimId = $.nullifierToUser[nullifier];
-        if (previousClaimId != 0) {
-            ClaimItem memory previousClaim = $.idToClaim[previousClaimId];
-            require(block.timestamp >= previousClaim.claim[4], "[AnonAadhaarCredentialIssuer]: Previous claim not expired.");
+        uint256 userNullifier = $.nullifierToUser[nullifier];
+        if (userNullifier != 0) {
+            uint256[] memory previousClaims = $.userClaims[_userId];
+
+            // Get the latest claim ID from the array
+            uint256 latestClaimId = previousClaims[previousClaims.length - 1];
+            ClaimItem memory latestClaim = $.idToClaim[latestClaimId];
+
+            require(block.timestamp >= latestClaim.claim[4], "[AnonAadhaarCredentialIssuer]: Previous claim not expired.");
         }
 
         // require(
@@ -221,6 +226,7 @@ contract AnonAadhaarBalanceCredentialIssuer is NonMerklizedIssuerBase, Ownable2S
             INonMerklizedIssuer.SubjectField({key: 'state', value: revealArray[3], rawValue: ''})
         );
 
+        $.nullifierToUser[nullifier] = _userId;
         addClaimHashAndTransit(hashIndex, hashValue);
         saveClaim(_userId, claimToSave);
     }

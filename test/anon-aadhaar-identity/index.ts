@@ -114,6 +114,23 @@ describe('Reproduce anon-aadhaar identity life cycle', function () {
       const claim = new Claim().unMarshalJson(JSON.stringify(inputs));
       const mtpProof = await identity.getClaimProof(claim.hIndex());
       expect(mtpProof.existence).to.be.true;
+
+      await expect(
+        identity.issueCredential(
+          _userId,
+          nullifierSeed,
+          anonAadhaarProof.nullifier,
+          anonAadhaarProof.timestamp,
+          user1address,
+          [
+            anonAadhaarProof.ageAbove18,
+            anonAadhaarProof.gender,
+            anonAadhaarProof.pincode,
+            anonAadhaarProof.state
+          ],
+          packedGroth16Proof
+        )
+      ).to.be.revertedWith('[AnonAadhaarCredentialIssuer]: Previous claim not expired.');
     });
   });
 
