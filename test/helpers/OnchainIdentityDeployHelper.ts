@@ -1,6 +1,6 @@
 import { ethers, upgrades } from 'hardhat';
 import { Contract } from 'ethers';
-import { SignerWithAddress } from '@nomiclabs/hardhat-ethers/signers';
+import { SignerWithAddress } from '@nomicfoundation/hardhat-ethers/signers';
 import { deployClaimBuilder, deployIdentityLib } from '../utils/deploy-utils';
 
 export class OnchainIdentityDeployHelper {

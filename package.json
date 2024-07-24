@@ -44,6 +44,7 @@
     "deploy:mumbai:identityexample": "npx hardhat run scripts/deployIdentityExample.ts --network mumbai",
     "deploy:amoy:identityexample": "npx hardhat run scripts/deployIdentityExample.ts --network amoy",
     "deploy:main:identityexample": "npx hardhat run scripts/deployIdentityExample.ts --network main",
+    "deploy:amoy:anonaadhaarbalancecredentialissuer": "npx hardhat run scripts/deployAnonAadhaarBalanceCredentialIssuer.ts --network amoy",
     "deploy:mumbai:balancecredentialissuer": "npx hardhat run scripts/deployBalanceCredentialIssuer.ts --network mumbai",
     "deploy:amoy:balancecredentialissuer": "npx hardhat run scripts/deployBalanceCredentialIssuer.ts --network amoy",
     "deploy:main:balancecredentialissuer": "npx hardhat run scripts/deployBalanceCredentialIssuer.ts --network main",

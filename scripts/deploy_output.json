@@ -1,0 +1,10 @@
+{
+  "state": "0x1a4cC30f2aA0377b0c3bc9848766D90cb4404124",
+  "smtLib": "0x50293C857E53bCaE810D79FC1720970d976723f1",
+  "balanceCredentialIssuer": "0x35D3D789a0d1B6b287ca22aF6Ee5fb6121EBfe91",
+  "poseidon2": "0x3Bbb6EC5F9Fd4912AC0E181887ac0545B3C542c1",
+  "poseidon3": "0xa90eEe6c14894eADE44ae3d2F928C5bdAaB4aE56",
+  "poseidon4": "0x76470F115aaF65054110DD908cC50b3DFcc01B87",
+  "network": "amoy",
+  "did": "did:polygonid:polygon:amoy:2qQ68JkRcf3y6tjMNNF6XqS7Ut1oNirYv6YLcWzBNB"
+}
