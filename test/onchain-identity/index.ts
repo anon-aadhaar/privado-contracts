@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { expect } from 'chai';
 import { ethers, network } from 'hardhat';
 import { OnchainIdentityDeployHelper } from '../helpers/OnchainIdentityDeployHelper';
@@ -46,7 +47,7 @@ describe('Next tests reproduce identity life cycle', function () {
       // console.log('Identity id:', BigInt(id).toString(16));
 
       expect(id).to.be.equal(
-        16318200065989903207865860093614592605747279308745685922538039864771744258n
+        BigInt('16318200065989903207865860093614592605747279308745685922538039864771744258')
         // 93C5BAE3728FC605AF22632F905BB4B223ED817C5A8000000000000001202
       );
     });

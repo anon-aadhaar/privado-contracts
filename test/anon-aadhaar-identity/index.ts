@@ -66,10 +66,12 @@ describe('Reproduce anon-aadhaar identity life cycle', function () {
 
       const credentialData = credential[0];
       expect(credentialData.id).to.be.equal(0);
-      expect(credentialData.context).to.be.an('array').that.includes(
-        // 'https://raw.githubusercontent.com/anon-aadhaar/privado-contracts/main/assets/anon-aadhaar.jsonld'
-        'https://schema.iden3.io/core/jsonld/displayMethod.jsonld'
-      );
+      expect(credentialData.context)
+        .to.be.an('array')
+        .that.includes(
+          'https://raw.githubusercontent.com/anon-aadhaar/privado-contracts/main/assets/anon-aadhaar.jsonld',
+          'https://schema.iden3.io/core/jsonld/displayMethod.jsonld'
+        );
       expect(credentialData._type).to.be.equal('AnonAadhaarCredential');
       expect(credentialData.credentialSchema.id).to.be.equal(
         'https://raw.githubusercontent.com/anon-aadhaar/privado-contracts/main/assets/anon-aadhaar.json'
