@@ -179,7 +179,7 @@ contract AnonAadhaarBalanceCredentialIssuer is NonMerklizedIssuerBase, Ownable2S
                 revealArray,
                 groth16Proof
             ),
-            '[AnonAadhaarVote]: The proof sent is not valid.'
+            '[AnonAadhaarBalanceCredentialIssuer]: The proof sent is not valid.'
         );
 
         uint64 expirationDate = convertTime(block.timestamp + 30 days);
@@ -192,7 +192,7 @@ contract AnonAadhaarBalanceCredentialIssuer is NonMerklizedIssuerBase, Ownable2S
             updatable: false,
             merklizedRootPosition: 0,
             version: 0,
-            id: nullifier,
+            id: _userId,
             revocationNonce: $.countOfIssuedClaims,
             expirationDate: expirationDate,
             // data
