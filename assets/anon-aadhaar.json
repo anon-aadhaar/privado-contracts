@@ -40,7 +40,7 @@
         "ageAbove18": {
           "description": "Is the age above 18 years old",
           "title": "Age above 18",
-          "type": "boolean"
+          "type": "string"
         },
         "gender": {
           "description": "Gender of the user",
