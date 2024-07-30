@@ -44,6 +44,11 @@
       "address": "0x35D3D789a0d1B6b287ca22aF6Ee5fb6121EBfe91",
       "txHash": "0xb6a0f407abe43afb266577fc20e5a2bed59e2b32547711d414f8cac66ee73253",
       "kind": "transparent"
+    },
+    {
+      "address": "0x9C1fa6fb133152829553199e6Caf02B7c9418032",
+      "txHash": "0x451d8489d3c6c587b648660200a29cc72e293f19eff340ee451ac60dade3a183",
+      "kind": "transparent"
     }
   ],
   "impls": {
@@ -918,6 +923,285 @@
               "contract": "AnonAadhaarBalanceCredentialIssuer",
               "label": "idToCredentialSubject",
               "type": "t_mapping(t_uint256,t_array(t_struct(SubjectField)143_storage)dyn_storage)",
+              "src": "contracts/anon-aadhaar/AnonAadhaarBalanceCredentialIssuer.sol:32",
+              "offset": 0,
+              "slot": "4"
+            }
+          ],
+          "erc7201:openzeppelin.storage.Ownable2Step": [
+            {
+              "contract": "Ownable2StepUpgradeable",
+              "label": "_pendingOwner",
+              "type": "t_address",
+              "src": "@openzeppelin/contracts-upgradeable/access/Ownable2StepUpgradeable.sol:23",
+              "offset": 0,
+              "slot": "0"
+            }
+          ],
+          "erc7201:openzeppelin.storage.Ownable": [
+            {
+              "contract": "OwnableUpgradeable",
+              "label": "_owner",
+              "type": "t_address",
+              "src": "@openzeppelin/contracts-upgradeable/access/OwnableUpgradeable.sol:24",
+              "offset": 0,
+              "slot": "0"
+            }
+          ],
+          "erc7201:openzeppelin.storage.Initializable": [
+            {
+              "contract": "Initializable",
+              "label": "_initialized",
+              "type": "t_uint64",
+              "src": "@openzeppelin/contracts-upgradeable/proxy/utils/Initializable.sol:69",
+              "offset": 0,
+              "slot": "0"
+            },
+            {
+              "contract": "Initializable",
+              "label": "_initializing",
+              "type": "t_bool",
+              "src": "@openzeppelin/contracts-upgradeable/proxy/utils/Initializable.sol:73",
+              "offset": 8,
+              "slot": "0"
+            }
+          ]
+        }
+      }
+    },
+    "590c2f2f7649cdf6b1d362e9cd1fa0a788a77292feba1b0b0a13309165f7d457": {
+      "address": "0x484CcD0d7f2Ef67c03fF88A9dc6eD8038c8AD564",
+      "txHash": "0xb312a469d9b5d1bd17afccefc53d393625e86614ea057dd21f29b3c3ff5a66a7",
+      "layout": {
+        "solcVersion": "0.8.20",
+        "storage": [
+          {
+            "label": "anonAadhaarVerifierAddr",
+            "offset": 0,
+            "slot": "0",
+            "type": "t_address",
+            "contract": "AnonAadhaarBalanceCredentialIssuer",
+            "src": "contracts/anon-aadhaar/AnonAadhaarBalanceCredentialIssuer.sol:19"
+          }
+        ],
+        "types": {
+          "t_address": {
+            "label": "address",
+            "numberOfBytes": "20"
+          },
+          "t_array(t_struct(SubjectField)46_storage)dyn_storage": {
+            "label": "struct INonMerklizedIssuer.SubjectField[]",
+            "numberOfBytes": "32"
+          },
+          "t_array(t_uint256)8_storage": {
+            "label": "uint256[8]",
+            "numberOfBytes": "256"
+          },
+          "t_array(t_uint256)dyn_storage": {
+            "label": "uint256[]",
+            "numberOfBytes": "32"
+          },
+          "t_bool": {
+            "label": "bool",
+            "numberOfBytes": "1"
+          },
+          "t_bytes_storage": {
+            "label": "bytes",
+            "numberOfBytes": "32"
+          },
+          "t_mapping(t_uint256,t_array(t_struct(SubjectField)46_storage)dyn_storage)": {
+            "label": "mapping(uint256 => struct INonMerklizedIssuer.SubjectField[])",
+            "numberOfBytes": "32"
+          },
+          "t_mapping(t_uint256,t_array(t_uint256)dyn_storage)": {
+            "label": "mapping(uint256 => uint256[])",
+            "numberOfBytes": "32"
+          },
+          "t_mapping(t_uint256,t_struct(ClaimItem)1105_storage)": {
+            "label": "mapping(uint256 => struct AnonAadhaarBalanceCredentialIssuer.ClaimItem)",
+            "numberOfBytes": "32"
+          },
+          "t_mapping(t_uint256,t_uint256)": {
+            "label": "mapping(uint256 => uint256)",
+            "numberOfBytes": "32"
+          },
+          "t_string_storage": {
+            "label": "string",
+            "numberOfBytes": "32"
+          },
+          "t_struct(BalanceCredentialIssuerStorage)1075_storage": {
+            "label": "struct AnonAadhaarBalanceCredentialIssuer.BalanceCredentialIssuerStorage",
+            "members": [
+              {
+                "label": "countOfIssuedClaims",
+                "type": "t_uint64",
+                "offset": 0,
+                "slot": "0"
+              },
+              {
+                "label": "userClaims",
+                "type": "t_mapping(t_uint256,t_array(t_uint256)dyn_storage)",
+                "offset": 0,
+                "slot": "1"
+              },
+              {
+                "label": "idToClaim",
+                "type": "t_mapping(t_uint256,t_struct(ClaimItem)1105_storage)",
+                "offset": 0,
+                "slot": "2"
+              },
+              {
+                "label": "nullifierToUser",
+                "type": "t_mapping(t_uint256,t_uint256)",
+                "offset": 0,
+                "slot": "3"
+              },
+              {
+                "label": "idToCredentialSubject",
+                "type": "t_mapping(t_uint256,t_array(t_struct(SubjectField)46_storage)dyn_storage)",
+                "offset": 0,
+                "slot": "4"
+              }
+            ],
+            "numberOfBytes": "160"
+          },
+          "t_struct(ClaimItem)1105_storage": {
+            "label": "struct AnonAadhaarBalanceCredentialIssuer.ClaimItem",
+            "members": [
+              {
+                "label": "id",
+                "type": "t_uint256",
+                "offset": 0,
+                "slot": "0"
+              },
+              {
+                "label": "issuanceDate",
+                "type": "t_uint64",
+                "offset": 0,
+                "slot": "1"
+              },
+              {
+                "label": "claim",
+                "type": "t_array(t_uint256)8_storage",
+                "offset": 0,
+                "slot": "2"
+              }
+            ],
+            "numberOfBytes": "320"
+          },
+          "t_struct(InitializableStorage)948_storage": {
+            "label": "struct Initializable.InitializableStorage",
+            "members": [
+              {
+                "label": "_initialized",
+                "type": "t_uint64",
+                "offset": 0,
+                "slot": "0"
+              },
+              {
+                "label": "_initializing",
+                "type": "t_bool",
+                "offset": 8,
+                "slot": "0"
+              }
+            ],
+            "numberOfBytes": "32"
+          },
+          "t_struct(Ownable2StepStorage)855_storage": {
+            "label": "struct Ownable2StepUpgradeable.Ownable2StepStorage",
+            "members": [
+              {
+                "label": "_pendingOwner",
+                "type": "t_address",
+                "offset": 0,
+                "slot": "0"
+              }
+            ],
+            "numberOfBytes": "32"
+          },
+          "t_struct(OwnableStorage)897_storage": {
+            "label": "struct OwnableUpgradeable.OwnableStorage",
+            "members": [
+              {
+                "label": "_owner",
+                "type": "t_address",
+                "offset": 0,
+                "slot": "0"
+              }
+            ],
+            "numberOfBytes": "32"
+          },
+          "t_struct(SubjectField)46_storage": {
+            "label": "struct INonMerklizedIssuer.SubjectField",
+            "members": [
+              {
+                "label": "key",
+                "type": "t_string_storage",
+                "offset": 0,
+                "slot": "0"
+              },
+              {
+                "label": "value",
+                "type": "t_uint256",
+                "offset": 0,
+                "slot": "1"
+              },
+              {
+                "label": "rawValue",
+                "type": "t_bytes_storage",
+                "offset": 0,
+                "slot": "2"
+              }
+            ],
+            "numberOfBytes": "96"
+          },
+          "t_uint256": {
+            "label": "uint256",
+            "numberOfBytes": "32"
+          },
+          "t_uint64": {
+            "label": "uint64",
+            "numberOfBytes": "8"
+          }
+        },
+        "namespaces": {
+          "erc7201:polygonid.storage.BalanceCredentialIssuer": [
+            {
+              "contract": "AnonAadhaarBalanceCredentialIssuer",
+              "label": "countOfIssuedClaims",
+              "type": "t_uint64",
+              "src": "contracts/anon-aadhaar/AnonAadhaarBalanceCredentialIssuer.sol:24",
+              "offset": 0,
+              "slot": "0"
+            },
+            {
+              "contract": "AnonAadhaarBalanceCredentialIssuer",
+              "label": "userClaims",
+              "type": "t_mapping(t_uint256,t_array(t_uint256)dyn_storage)",
+              "src": "contracts/anon-aadhaar/AnonAadhaarBalanceCredentialIssuer.sol:26",
+              "offset": 0,
+              "slot": "1"
+            },
+            {
+              "contract": "AnonAadhaarBalanceCredentialIssuer",
+              "label": "idToClaim",
+              "type": "t_mapping(t_uint256,t_struct(ClaimItem)1105_storage)",
+              "src": "contracts/anon-aadhaar/AnonAadhaarBalanceCredentialIssuer.sol:27",
+              "offset": 0,
+              "slot": "2"
+            },
+            {
+              "contract": "AnonAadhaarBalanceCredentialIssuer",
+              "label": "nullifierToUser",
+              "type": "t_mapping(t_uint256,t_uint256)",
+              "src": "contracts/anon-aadhaar/AnonAadhaarBalanceCredentialIssuer.sol:28",
+              "offset": 0,
+              "slot": "3"
+            },
+            {
+              "contract": "AnonAadhaarBalanceCredentialIssuer",
+              "label": "idToCredentialSubject",
+              "type": "t_mapping(t_uint256,t_array(t_struct(SubjectField)46_storage)dyn_storage)",
               "src": "contracts/anon-aadhaar/AnonAadhaarBalanceCredentialIssuer.sol:32",
               "offset": 0,
               "slot": "4"
