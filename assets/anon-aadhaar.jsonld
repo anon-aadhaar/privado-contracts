@@ -17,19 +17,19 @@
           "xsd": "http://www.w3.org/2001/XMLSchema#",
           "ageAbove18": {
             "@id": "vocab:ageAbove18",
-            "@type": "xsd:string"
+            "@type": "xsd:positiveInteger"
           },
           "gender": {
             "@id": "vocab:gender",
-            "@type": "xsd:string"
+            "@type": "xsd:positiveInteger"
           },
           "pincode": {
             "@id": "vocab:pincode",
-            "@type": "xsd:string"
+            "@type": "xsd:positiveInteger"
           },
           "state": {
             "@id": "vocab:state",
-            "@type": "xsd:string"
+            "@type": "xsd:positiveInteger"
           }
         }
       }
