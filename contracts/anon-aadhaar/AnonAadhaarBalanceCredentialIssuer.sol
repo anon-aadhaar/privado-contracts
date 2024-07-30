@@ -119,7 +119,7 @@ contract AnonAadhaarBalanceCredentialIssuer is NonMerklizedIssuerBase, Ownable2S
                     _type: 'JsonSchema2023'
                 }),
                 displayMethod: INonMerklizedIssuer.DisplayMethod({
-                    id: 'ipfs://QmS8eY8ZCiAAW8qgx3T6SQ3HDGeddwLZsjPXNAZExQwRY4',
+                    id: 'https://raw.githubusercontent.com/anon-aadhaar/privado-contracts/main/assets/anon-aadhaar-display-method.json',
                     _type: 'Iden3BasicDisplayMethodV1'
                 })
             });

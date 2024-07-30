@@ -1,0 +1,13 @@
+{
+  "title": "Anon Aadhaar",
+  "description": "Proof of Identity through Aadhaar",
+  "issuerName": "Anon Aadhaar",
+  "titleTextColor": "#c55509",
+  "descriptionTextColor": "#ee7108",
+  "issuerTextColor": "#06750c",
+  "backgroundColor": "#ffffff",
+  "logo": {
+    "uri": "https://raw.githubusercontent.com/anon-aadhaar/privado-contracts/main/assets/logo.png",
+    "alt": "Anon Aadhaar Logo"
+  }
+}
