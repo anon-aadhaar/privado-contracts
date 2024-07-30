@@ -181,7 +181,6 @@ contract AnonAadhaarBalanceCredentialIssuer is NonMerklizedIssuerBase, Ownable2S
             ),
             '[AnonAadhaarBalanceCredentialIssuer]: The proof sent is not valid.'
         );
-        require(revealArray[0] == 0 || revealArray[0] == 1, "[AnonAadhaarBalanceCredentialIssuer]: revealArray[0] must be 0 or 1");
 
         uint64 expirationDate = convertTime(block.timestamp + 30 days);
 
@@ -198,7 +197,7 @@ contract AnonAadhaarBalanceCredentialIssuer is NonMerklizedIssuerBase, Ownable2S
             expirationDate: expirationDate,
             // data
             merklizedRoot: 0,
-            indexDataSlotA = (revealArray[0] == 1),
+            indexDataSlotA: revealArray[0],
             indexDataSlotB: revealArray[1],
             valueDataSlotA: revealArray[2],
             valueDataSlotB: revealArray[3]
