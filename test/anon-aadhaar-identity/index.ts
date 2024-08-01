@@ -78,7 +78,7 @@ describe('Reproduce anon-aadhaar identity life cycle', function () {
       );
       expect(credentialData.credentialSchema['_type']).to.be.equal('JsonSchema2023');
       expect(credentialData.displayMethod.id).to.be.equal(
-        'ipfs://QmS8eY8ZCiAAW8qgx3T6SQ3HDGeddwLZsjPXNAZExQwRY4'
+        'https://raw.githubusercontent.com/anon-aadhaar/privado-contracts/main/assets/anon-aadhaar-display-method.json'
       );
       expect(credentialData.displayMethod['_type']).to.be.equal('Iden3BasicDisplayMethodV1');
 
