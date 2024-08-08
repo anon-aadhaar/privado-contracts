@@ -17,6 +17,7 @@ import {IAnonAadhaar} from '../interfaces/IAnonAadhaar.sol';
 contract AnonAadhaarBalanceCredentialIssuer is NonMerklizedIssuerBase, Ownable2StepUpgradeable {
     using IdentityLib for IdentityLib.Data;
     address public anonAadhaarVerifierAddr;
+    uint256 immutable storedNullifierSeed;
 
     /// @custom:storage-location erc7201:polygonid.storage.BalanceCredentialIssuer
     struct BalanceCredentialIssuerStorage {
@@ -65,9 +66,10 @@ contract AnonAadhaarBalanceCredentialIssuer is NonMerklizedIssuerBase, Ownable2S
         uint256[8] claim;
     }
 
-    function initialize(address _stateContractAddr, address _verifierAddr) public initializer {
+    function initialize(address _stateContractAddr, address _verifierAddr, uint nullifierSeed) public initializer {
         require(anonAadhaarVerifierAddr == address(0), "Already initialized");
         anonAadhaarVerifierAddr = _verifierAddr;
+        storedNullifierSeed = nullifierSeed;
         super.initialize(_stateContractAddr);
         __Ownable_init(_msgSender());
     }
@@ -166,10 +168,18 @@ contract AnonAadhaarBalanceCredentialIssuer is NonMerklizedIssuerBase, Ownable2S
             require(block.timestamp >= latestClaim.claim[4], "[AnonAadhaarCredentialIssuer]: Previous claim not expired.");
         }
 
-        // require(
-        //     isLessThan3HoursAgo(timestamp),
-        //     '[AnonAadhaarVote]: Proof must be generated with Aadhaar data signed less than 3 hours ago.'
-        // );
+        require(
+            addressToUint256(msg.sender) == signal,
+            '[AnonAadhaarBalanceCredentialIssuer]: Wrong user signal sent.'
+        );
+        require(
+            isLessThan3HoursAgo(timestamp),
+            '[AnonAadhaarBalanceCredentialIssuer]: Proof must be generated with Aadhaar data signed less than 3 hours ago.'
+        );
+        require(
+            storedNullifierSeed == nullifierSeed,
+            '[AnonAadhaarBalanceCredentialIssuer]: Wrong nullifierSeed, you must generate proof with the right seed.'
+        );
         require(
             IAnonAadhaar(anonAadhaarVerifierAddr).verifyAnonAadhaarProof(
                 nullifierSeed, // nullifier seed
@@ -256,5 +266,12 @@ contract AnonAadhaarBalanceCredentialIssuer is NonMerklizedIssuerBase, Ownable2S
     /// @return bool
     function isLessThan3HoursAgo(uint timestamp) public view returns (bool) {
         return timestamp > (block.timestamp - 3 hours);
+    }
+
+    /// @dev Convert an address to uint256, used to check against signal.
+    /// @param _addr: msg.sender address.
+    /// @return Address msg.sender's address in uint256
+    function addressToUint256(address _addr) private pure returns (uint256) {
+        return uint256(uint160(_addr));
     }
 }

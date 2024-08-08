@@ -7,7 +7,7 @@ import { AnonAadhaarProof, PackedGroth16Proof } from '@anon-aadhaar/core';
 import { generateAnonAadhaarProof } from '../helpers/generateAnonAadhaarProof';
 import { bigIntsToString } from '../../scripts/utils';
 
-const nullifierSeed = 1234;
+const nullifierSeed = 85824580742762287071232;
 const _userId = 1;
 
 describe('Reproduce anon-aadhaar identity life cycle', function () {
