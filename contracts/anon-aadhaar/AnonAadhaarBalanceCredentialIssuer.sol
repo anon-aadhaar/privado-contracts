@@ -17,7 +17,7 @@ import {IAnonAadhaar} from '../interfaces/IAnonAadhaar.sol';
 contract AnonAadhaarBalanceCredentialIssuer is NonMerklizedIssuerBase, Ownable2StepUpgradeable {
     using IdentityLib for IdentityLib.Data;
     address public anonAadhaarVerifierAddr;
-    uint256 immutable storedNullifierSeed;
+    uint256 public constant storedNullifierSeed = 742762287071232;
 
     /// @custom:storage-location erc7201:polygonid.storage.BalanceCredentialIssuer
     struct BalanceCredentialIssuerStorage {
@@ -66,10 +66,9 @@ contract AnonAadhaarBalanceCredentialIssuer is NonMerklizedIssuerBase, Ownable2S
         uint256[8] claim;
     }
 
-    function initialize(address _stateContractAddr, address _verifierAddr, uint nullifierSeed) public initializer {
+    function initialize(address _stateContractAddr, address _verifierAddr) public initializer {
         require(anonAadhaarVerifierAddr == address(0), "Already initialized");
         anonAadhaarVerifierAddr = _verifierAddr;
-        storedNullifierSeed = nullifierSeed;
         super.initialize(_stateContractAddr);
         __Ownable_init(_msgSender());
     }

@@ -6,8 +6,6 @@ import { deployClaimBuilder, deployIdentityLib } from '../utils/deploy-utils';
 export const testPublicKeyHash =
   '15134874015316324267425466444584014077184337590635665158241104437045239495873';
 
-export const _nullifierSeed = 85824580742762287071232;
-
 export class AnonAadhaarBalanceCredentialIssuerDeployHelper {
   constructor(
     private signers: SignerWithAddress[],
@@ -75,7 +73,7 @@ export class AnonAadhaarBalanceCredentialIssuerDeployHelper {
     );
     const AnonAadhaarBalanceCredentialIssuer = await upgrades.deployProxy(
       balanceCredentialIssuerFactory,
-      [stateContractAddress, _AnonAadhaarAddress, _nullifierSeed],
+      [stateContractAddress, _AnonAadhaarAddress],
       {
         unsafeAllow: ['external-library-linking', 'struct-definition', 'state-variable-assignment'],
         initializer: 'initialize(address,address)'

@@ -1,8 +1,5 @@
 import { ethers } from 'hardhat';
-import {
-  _nullifierSeed,
-  AnonAadhaarBalanceCredentialIssuerDeployHelper
-} from '../helpers/AnonAadhaarBalanceCredentialIssuerDeployHelper';
+import { AnonAadhaarBalanceCredentialIssuerDeployHelper } from '../helpers/AnonAadhaarBalanceCredentialIssuerDeployHelper';
 import { StateDeployHelper } from '../helpers/StateDeployHelper';
 import { expect } from 'chai';
 import { Claim } from '@iden3/js-iden3-core';
@@ -10,6 +7,7 @@ import { AnonAadhaarProof, PackedGroth16Proof } from '@anon-aadhaar/core';
 import { generateAnonAadhaarProof } from '../helpers/generateAnonAadhaarProof';
 import { bigIntsToString } from '../../scripts/utils';
 
+export const _nullifierSeed = 742762287071232;
 const _userId = 1;
 
 describe('Reproduce anon-aadhaar identity life cycle', function () {
