@@ -1,5 +1,8 @@
 import { ethers } from 'hardhat';
-import { AnonAadhaarBalanceCredentialIssuerDeployHelper } from '../helpers/AnonAadhaarBalanceCredentialIssuerDeployHelper';
+import {
+  _nullifierSeed,
+  AnonAadhaarBalanceCredentialIssuerDeployHelper
+} from '../helpers/AnonAadhaarBalanceCredentialIssuerDeployHelper';
 import { StateDeployHelper } from '../helpers/StateDeployHelper';
 import { expect } from 'chai';
 import { Claim } from '@iden3/js-iden3-core';
@@ -7,7 +10,6 @@ import { AnonAadhaarProof, PackedGroth16Proof } from '@anon-aadhaar/core';
 import { generateAnonAadhaarProof } from '../helpers/generateAnonAadhaarProof';
 import { bigIntsToString } from '../../scripts/utils';
 
-const nullifierSeed = 85824580742762287071232;
 const _userId = 1;
 
 describe('Reproduce anon-aadhaar identity life cycle', function () {
@@ -39,7 +41,7 @@ describe('Reproduce anon-aadhaar identity life cycle', function () {
     const [user1] = await ethers.getSigners();
     user1address = user1.address;
 
-    const proof = await generateAnonAadhaarProof(nullifierSeed, user1address);
+    const proof = await generateAnonAadhaarProof(_nullifierSeed, user1address);
     anonAadhaarProof = proof.anonAadhaarProof;
     packedGroth16Proof = proof.packedGroth16Proof;
   });
@@ -48,7 +50,7 @@ describe('Reproduce anon-aadhaar identity life cycle', function () {
     it.only("validate identity's id", async function () {
       const tx = await identity.issueCredential(
         _userId,
-        nullifierSeed,
+        _nullifierSeed,
         anonAadhaarProof.nullifier,
         anonAadhaarProof.timestamp,
         user1address,
@@ -120,7 +122,7 @@ describe('Reproduce anon-aadhaar identity life cycle', function () {
       await expect(
         identity.issueCredential(
           _userId,
-          nullifierSeed,
+          _nullifierSeed,
           anonAadhaarProof.nullifier,
           anonAadhaarProof.timestamp,
           user1address,
