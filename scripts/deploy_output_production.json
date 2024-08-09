@@ -1,0 +1,9 @@
+{
+ "state": "0x1a4cC30f2aA0377b0c3bc9848766D90cb4404124",
+ "smtLib": "0x83bf4a2e1E895cdD115fFd997Ee01D9F72A8521D",
+ "balanceCredentialIssuer": "0xAde245AF5d8f1BeC5417d9A44cdAcEf4E770E30D",
+ "poseidon2": "0x286cd8358223457D9029761bFF7A60E5EedFA551",
+ "poseidon3": "0xb23c55b25cC171D85778F8d0c4Beee44364919B3",
+ "poseidon4": "0xca0ef164798437b51018913E6C52C23199ef0fd7",
+ "network": "amoy"
+}

@@ -4,7 +4,7 @@ import { deployPoseidons } from '../test/utils/deploy-poseidons.util';
 import { StateDeployHelper } from '../test/helpers/StateDeployHelper';
 import { ethers } from 'hardhat';
 import { AnonAadhaarBalanceCredentialIssuerDeployHelper } from '../test/helpers/AnonAadhaarBalanceCredentialIssuerDeployHelper';
-const pathOutputJson = path.join(__dirname, './deploy_output.json');
+const pathOutputJson = path.join(__dirname, './deploy_output_production.json');
 
 async function main() {
   // const stateAddress = '0x624ce98D2d27b20b8f8d521723Df8fC4db71D79D'; // current iden3 state smart contract on main
