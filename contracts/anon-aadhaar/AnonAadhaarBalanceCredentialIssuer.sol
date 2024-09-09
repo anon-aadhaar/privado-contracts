@@ -141,7 +141,6 @@ contract AnonAadhaarBalanceCredentialIssuer is NonMerklizedIssuerBase, Ownable2S
      * @param nullifierSeed: Nullifier Seed used while generating the proof.
      * @param nullifier: Nullifier for the user's Aadhaar data, used as user id for which the claim is issued.
      * @param timestamp: Timestamp of when the QR code was signed.
-     * @param signal: signal used while generating the proof, should be equal to msg.sender.
      * @param revealArray: Array of the values used to reveal data, if value is 1 data is revealed, not if 0.
      * @param groth16Proof: SNARK Groth16 proof.
      */
@@ -150,7 +149,6 @@ contract AnonAadhaarBalanceCredentialIssuer is NonMerklizedIssuerBase, Ownable2S
         uint nullifierSeed,
         uint nullifier,
         uint timestamp,
-        uint signal,
         uint[4] calldata revealArray, 
         uint[8] calldata groth16Proof) public {
         BalanceCredentialIssuerStorage storage $ = _getBalanceCredentialIssuerStorage();
@@ -167,10 +165,10 @@ contract AnonAadhaarBalanceCredentialIssuer is NonMerklizedIssuerBase, Ownable2S
             require(block.timestamp >= latestClaim.claim[4], "[AnonAadhaarCredentialIssuer]: Previous claim not expired.");
         }
 
-        require(
-            addressToUint256(msg.sender) == signal,
-            '[AnonAadhaarBalanceCredentialIssuer]: Wrong user signal sent.'
-        );
+        // require(
+        //     addressToUint256(msg.sender) == signal,
+        //     '[AnonAadhaarBalanceCredentialIssuer]: Wrong user signal sent.'
+        // );
         require(
             isLessThan3HoursAgo(timestamp),
             '[AnonAadhaarBalanceCredentialIssuer]: Proof must be generated with Aadhaar data signed less than 3 hours ago.'
@@ -184,7 +182,7 @@ contract AnonAadhaarBalanceCredentialIssuer is NonMerklizedIssuerBase, Ownable2S
                 nullifierSeed, // nullifier seed
                 nullifier,
                 timestamp,
-                signal,
+                _userId,
                 revealArray,
                 groth16Proof
             ),
@@ -192,6 +190,7 @@ contract AnonAadhaarBalanceCredentialIssuer is NonMerklizedIssuerBase, Ownable2S
         );
 
         uint64 expirationDate = convertTime(block.timestamp + 30 days);
+        uint256 random_nonce = generateNonce();
 
         ClaimBuilder.ClaimData memory claimData = ClaimBuilder.ClaimData({
             // metadata
@@ -209,7 +208,7 @@ contract AnonAadhaarBalanceCredentialIssuer is NonMerklizedIssuerBase, Ownable2S
             indexDataSlotA: revealArray[0],
             indexDataSlotB: revealArray[1],
             valueDataSlotA: revealArray[2],
-            valueDataSlotB: generateNonce()
+            valueDataSlotB: random_nonce
         });
         uint256[8] memory claim = ClaimBuilder.build(claimData);
 
@@ -232,7 +231,7 @@ contract AnonAadhaarBalanceCredentialIssuer is NonMerklizedIssuerBase, Ownable2S
             INonMerklizedIssuer.SubjectField({key: 'pincode', value: revealArray[2], rawValue: ''})
         );
         $.idToCredentialSubject[$.countOfIssuedClaims].push(
-            INonMerklizedIssuer.SubjectField({key: 'state', value: revealArray[3], rawValue: ''})
+            INonMerklizedIssuer.SubjectField({key: 'randomNonce', value: random_nonce, rawValue: ''})
         );
 
         $.nullifierToUser[nullifier] = _userId;
