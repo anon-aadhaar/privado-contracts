@@ -12,7 +12,7 @@
       "slotIndexA": "ageAbove18",
       "slotIndexB": "gender",
       "slotValueA": "pincode",
-      "slotValueB": "state"
+      "slotValueB": "random_nonce"
     }
   },
   "description": "Anon Aadhaar schema",
@@ -53,9 +53,9 @@
           "type": "string"
         },
         "state": {
-          "description": "State of the user",
-          "title": "State",
-          "type": "string"
+          "description": "Random nonce of the credential",
+          "title": "Random nonce",
+          "type": "integer"
         }
       },
       "required": [],

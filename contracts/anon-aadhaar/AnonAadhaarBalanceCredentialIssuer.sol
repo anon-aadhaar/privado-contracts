@@ -209,7 +209,7 @@ contract AnonAadhaarBalanceCredentialIssuer is NonMerklizedIssuerBase, Ownable2S
             indexDataSlotA: revealArray[0],
             indexDataSlotB: revealArray[1],
             valueDataSlotA: revealArray[2],
-            valueDataSlotB: revealArray[3]
+            valueDataSlotB: generateNonce()
         });
         uint256[8] memory claim = ClaimBuilder.build(claimData);
 
@@ -272,5 +272,21 @@ contract AnonAadhaarBalanceCredentialIssuer is NonMerklizedIssuerBase, Ownable2S
     /// @return Address msg.sender's address in uint256
     function addressToUint256(address _addr) private pure returns (uint256) {
         return uint256(uint160(_addr));
+    }
+
+    /// @dev Generate a random nonce for the credentials to be unique.
+    /// @return Nonce random nonce
+    function generateNonce() public view returns (uint256) {
+        uint256 nonce = uint256(
+            keccak256(
+                abi.encodePacked(
+                    block.timestamp,  // Current block timestamp
+                    block.difficulty, // Current block difficulty
+                    msg.sender        // Address of the sender
+                )
+            )
+        );
+        uint256 mask = (1 << 253) - 1; // Mask with 253 bits set to 1, to have SNARK friendly nonce 
+        return nonce & mask;
     }
 }

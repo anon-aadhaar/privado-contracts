@@ -2,7 +2,7 @@ import { ethers, upgrades } from 'hardhat';
 import { Contract } from 'ethers';
 import { SignerWithAddress } from '@nomicfoundation/hardhat-ethers/signers';
 import { deployClaimBuilder, deployIdentityLib } from '../utils/deploy-utils';
-import { productionPublicKeyHash } from '@anon-aadhaar/core';
+import { testPublicKeyHash } from '@anon-aadhaar/core';
 
 export class AnonAadhaarBalanceCredentialIssuerDeployHelper {
   constructor(
@@ -49,7 +49,7 @@ export class AnonAadhaarBalanceCredentialIssuerDeployHelper {
 
     const _verifierAddress = await verifier.getAddress();
 
-    const pubkeyHashBigInt = BigInt(productionPublicKeyHash).toString();
+    const pubkeyHashBigInt = BigInt(testPublicKeyHash).toString();
 
     const AnonAadhaarContract = await ethers.getContractFactory('AnonAadhaar');
     const anonAadhaarVerifier = await AnonAadhaarContract.deploy(

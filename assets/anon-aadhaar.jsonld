@@ -13,7 +13,7 @@
           "id": "@id",
           "type": "@type",
           "vocab": "https://github.com/anon-aadhaar/privado-contracts/main/assets/anon-aadhaar-vocab.md#",
-          "iden3_serialization": "iden3:v1:slotIndexA=ageAbove18&slotIndexB=gender&slotValueA=pincode&slotValueB=state",
+          "iden3_serialization": "iden3:v1:slotIndexA=ageAbove18&slotIndexB=gender&slotValueA=pincode&slotValueB=random_nonce",
           "xsd": "http://www.w3.org/2001/XMLSchema#",
           "ageAbove18": {
             "@id": "vocab:ageAbove18",
@@ -28,7 +28,7 @@
             "@type": "xsd:positiveInteger"
           },
           "state": {
-            "@id": "vocab:state",
+            "@id": "vocab:random_nonce",
             "@type": "xsd:positiveInteger"
           }
         }
