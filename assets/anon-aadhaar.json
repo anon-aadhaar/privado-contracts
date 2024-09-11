@@ -55,7 +55,7 @@
         "state": {
           "description": "Random nonce of the credential",
           "title": "Random nonce",
-          "type": "integer"
+          "type": "string"
         }
       },
       "required": [],
