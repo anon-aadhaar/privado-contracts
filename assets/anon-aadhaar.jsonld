@@ -29,7 +29,7 @@
           },
           "randomNonce": {
             "@id": "vocab:randomNonce",
-            "@type": "xsd:String"
+            "@type": "xsd:positiveInteger"
           }
         }
       }
