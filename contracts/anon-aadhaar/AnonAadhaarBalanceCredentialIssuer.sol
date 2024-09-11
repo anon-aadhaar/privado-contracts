@@ -141,6 +141,7 @@ contract AnonAadhaarBalanceCredentialIssuer is NonMerklizedIssuerBase, Ownable2S
      * @param nullifierSeed: Nullifier Seed used while generating the proof.
      * @param nullifier: Nullifier for the user's Aadhaar data, used as user id for which the claim is issued.
      * @param timestamp: Timestamp of when the QR code was signed.
+     * @param signal: signal used while generating the proof, should be equal to msg.sender.
      * @param revealArray: Array of the values used to reveal data, if value is 1 data is revealed, not if 0.
      * @param groth16Proof: SNARK Groth16 proof.
      */
@@ -149,45 +150,15 @@ contract AnonAadhaarBalanceCredentialIssuer is NonMerklizedIssuerBase, Ownable2S
         uint nullifierSeed,
         uint nullifier,
         uint timestamp,
+        uint signal,
         uint[4] calldata revealArray, 
         uint[8] calldata groth16Proof) public {
         BalanceCredentialIssuerStorage storage $ = _getBalanceCredentialIssuerStorage();
-
         // Check if the nullifier has already been used
-        uint256 userNullifier = $.nullifierToUser[nullifier];
-        if (userNullifier != 0) {
-            uint256[] memory previousClaims = $.userClaims[_userId];
+        _checkPreviousClaims(_userId, nullifier);
 
-            // Get the latest claim ID from the array
-            uint256 latestClaimId = previousClaims[previousClaims.length - 1];
-            ClaimItem memory latestClaim = $.idToClaim[latestClaimId];
-
-            require(block.timestamp >= latestClaim.claim[4], "[AnonAadhaarCredentialIssuer]: Previous claim not expired.");
-        }
-
-        // require(
-        //     addressToUint256(msg.sender) == signal,
-        //     '[AnonAadhaarBalanceCredentialIssuer]: Wrong user signal sent.'
-        // );
-        require(
-            isLessThan3HoursAgo(timestamp),
-            '[AnonAadhaarBalanceCredentialIssuer]: Proof must be generated with Aadhaar data signed less than 3 hours ago.'
-        );
-        require(
-            storedNullifierSeed == nullifierSeed,
-            '[AnonAadhaarBalanceCredentialIssuer]: Wrong nullifierSeed, you must generate proof with the right seed.'
-        );
-        require(
-            IAnonAadhaar(anonAadhaarVerifierAddr).verifyAnonAadhaarProof(
-                nullifierSeed, // nullifier seed
-                nullifier,
-                timestamp,
-                _userId,
-                revealArray,
-                groth16Proof
-            ),
-            '[AnonAadhaarBalanceCredentialIssuer]: The proof sent is not valid.'
-        );
+        // Check Anon Aadhaar Proof
+        _validateProof(nullifierSeed, nullifier, timestamp, signal, revealArray, groth16Proof);
 
         uint64 expirationDate = convertTime(block.timestamp + 30 days);
         uint256 random_nonce = generateNonce();
@@ -287,5 +258,55 @@ contract AnonAadhaarBalanceCredentialIssuer is NonMerklizedIssuerBase, Ownable2S
         );
         uint256 mask = (1 << 253) - 1; // Mask with 253 bits set to 1, to have SNARK friendly nonce 
         return nonce & mask;
+    }
+
+    function _validateProof(
+        uint nullifierSeed,
+        uint nullifier,
+        uint timestamp,
+        uint signal,
+        uint[4] calldata revealArray, 
+        uint[8] calldata groth16Proof) internal view {
+        require(
+            addressToUint256(msg.sender) == signal,
+            '[AnonAadhaarBalanceCredentialIssuer]: Wrong user signal sent.'
+        );
+        require(
+            isLessThan3HoursAgo(timestamp),
+            '[AnonAadhaarBalanceCredentialIssuer]: Proof must be generated with Aadhaar data signed less than 3 hours ago.'
+        );
+        require(
+            storedNullifierSeed == nullifierSeed,
+            '[AnonAadhaarBalanceCredentialIssuer]: Wrong nullifierSeed, you must generate proof with the right seed.'
+        );
+        require(
+            IAnonAadhaar(anonAadhaarVerifierAddr).verifyAnonAadhaarProof(
+                nullifierSeed, // nullifier seed
+                nullifier,
+                timestamp,
+                signal,
+                revealArray,
+                groth16Proof
+            ),
+            '[AnonAadhaarBalanceCredentialIssuer]: The proof sent is not valid.'
+        );
+    }
+
+    function _checkPreviousClaims(uint _userId, uint nullifier) internal view {
+        BalanceCredentialIssuerStorage storage $ = _getBalanceCredentialIssuerStorage();
+        
+        uint256 userNullifier = $.nullifierToUser[nullifier];
+        if (userNullifier != 0) {
+            uint256[] memory previousClaims = $.userClaims[_userId];
+
+            // Get the latest claim ID from the array
+            uint256 latestClaimId = previousClaims[previousClaims.length - 1];
+            ClaimItem memory latestClaim = $.idToClaim[latestClaimId];
+
+            require(
+                block.timestamp >= latestClaim.claim[4],
+                "[AnonAadhaarCredentialIssuer]: Previous claim not expired."
+            );
+        }
     }
 }

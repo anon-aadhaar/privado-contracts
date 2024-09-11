@@ -28,7 +28,7 @@
             "@type": "xsd:positiveInteger"
           },
           "state": {
-            "@id": "vocab:random_nonce",
+            "@id": "vocab:randomNonce",
             "@type": "xsd:positiveInteger"
           }
         }

@@ -39,7 +39,7 @@ describe('Reproduce anon-aadhaar identity life cycle', function () {
     const [user1] = await ethers.getSigners();
     user1address = user1.address;
 
-    const proof = await generateAnonAadhaarProof(_nullifierSeed, String(_userId));
+    const proof = await generateAnonAadhaarProof(_nullifierSeed, user1address);
     anonAadhaarProof = proof.anonAadhaarProof;
     packedGroth16Proof = proof.packedGroth16Proof;
   });
@@ -51,6 +51,7 @@ describe('Reproduce anon-aadhaar identity life cycle', function () {
         _nullifierSeed,
         anonAadhaarProof.nullifier,
         anonAadhaarProof.timestamp,
+        user1address,
         [
           anonAadhaarProof.ageAbove18,
           anonAadhaarProof.gender,
@@ -103,9 +104,8 @@ describe('Reproduce anon-aadhaar identity life cycle', function () {
       expect(pincodeField.value).to.be.equal(110051);
 
       // state credential
-      const stateField = credentialSubject[3];
-      expect(stateField.key).to.be.equal('randomNonce');
-      // expect(bigIntsToString([BigInt(stateField.value)])).to.be.equal('Delhi');
+      const randomNonce = credentialSubject[3];
+      expect(randomNonce.key).to.be.equal('randomNonce');
 
       const inputs: Array<string> = [];
       coreClaim.forEach((c) => {
@@ -122,6 +122,7 @@ describe('Reproduce anon-aadhaar identity life cycle', function () {
           _nullifierSeed,
           anonAadhaarProof.nullifier,
           anonAadhaarProof.timestamp,
+          user1address,
           [
             anonAadhaarProof.ageAbove18,
             anonAadhaarProof.gender,

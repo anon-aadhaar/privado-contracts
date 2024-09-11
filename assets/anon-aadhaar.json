@@ -12,7 +12,7 @@
       "slotIndexA": "ageAbove18",
       "slotIndexB": "gender",
       "slotValueA": "pincode",
-      "slotValueB": "random_nonce"
+      "slotValueB": "randomNonce"
     }
   },
   "description": "Anon Aadhaar schema",
