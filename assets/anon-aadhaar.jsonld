@@ -27,7 +27,7 @@
             "@id": "vocab:pincode",
             "@type": "xsd:positiveInteger"
           },
-          "state": {
+          "randomNonce": {
             "@id": "vocab:randomNonce",
             "@type": "xsd:String"
           }
