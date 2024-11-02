@@ -176,10 +176,10 @@ contract AnonAadhaarBalanceCredentialIssuer is NonMerklizedIssuerBase, Ownable2S
             expirationDate: expirationDate,
             // data
             merklizedRoot: 0,
-            indexDataSlotA: revealArray[0],
+            indexDataSlotA: random_nonce,
             indexDataSlotB: revealArray[1],
             valueDataSlotA: revealArray[2],
-            valueDataSlotB: random_nonce
+            valueDataSlotB: revealArray[0]
         });
         uint256[8] memory claim = ClaimBuilder.build(claimData);
 
