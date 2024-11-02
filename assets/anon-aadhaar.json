@@ -9,10 +9,10 @@
     "version": "1.0",
     "type": "AnonAadhaarCredential",
     "iden3Serialization": {
-      "slotIndexA": "ageAbove18",
+      "slotIndexA": "randomNonce",
       "slotIndexB": "gender",
       "slotValueA": "pincode",
-      "slotValueB": "randomNonce"
+      "slotValueB": "ageAbove18"
     }
   },
   "description": "Anon Aadhaar schema",

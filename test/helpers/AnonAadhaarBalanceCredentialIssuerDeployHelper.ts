@@ -43,13 +43,14 @@ export class AnonAadhaarBalanceCredentialIssuerDeployHelper {
       true
     );
 
-    this.log('======== Balance credential issuer: deploy anon aadhaar verifier contracts ========');
     const Verifier = await ethers.getContractFactory('Verifier');
     const verifier = await Verifier.deploy();
 
     const _verifierAddress = await verifier.getAddress();
 
     const pubkeyHashBigInt = BigInt(testPublicKeyHash).toString();
+
+    this.log('======== Balance credential issuer: deploy anon aadhaar verifier contracts ========');
 
     const AnonAadhaarContract = await ethers.getContractFactory('AnonAadhaar');
     const anonAadhaarVerifier = await AnonAadhaarContract.deploy(
