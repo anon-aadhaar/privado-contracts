@@ -54,7 +54,7 @@ contract AnonAadhaarBalanceCredentialIssuer is NonMerklizedIssuerBase, Ownable2S
 
     // jsonldSchemaHash hash of jsonld schema.
     // More about schema: https://devs.polygonid.com/docs/issuer-node/issuer-node-api/claim/apis/#get-claims
-    uint256 private constant jsonldSchemaHash = 33373039626664303063323863343136;
+    uint256 private constant jsonldSchemaHash = 259604931004022950635069222444527286322;
     string private constant jsonSchema =
         'https://raw.githubusercontent.com/anon-aadhaar/privado-contracts/main/assets/anon-aadhaar.json';
     string private constant jsonldSchema =
